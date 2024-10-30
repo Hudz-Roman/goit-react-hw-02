@@ -1,3 +1,4 @@
+import { useState } from 'react';
 //? Components
 import Description from './Description/Description';
 import Feedback from './Feedback/Feedback';
@@ -7,16 +8,24 @@ import 'modern-normalize';
 import '../index.css';
 
 function App() {
-  // const responce = {
-  //   good: 0,
-  //   neutral: 0,
-  //   bad: 0,
-  // };
+  const [resp, setResp] = useState({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  });
+
+  const handleFeedback = (type) => {
+    setResp((prev) => ({
+      ...prev,
+      [type]: prev[type] + 1,
+    }));
+  };
+
   return (
     <div>
       <Description />
-      <Options />
-      <Feedback />
+      <Options handleFeedback={handleFeedback} />
+      <Feedback resp={resp} />
     </div>
   );
 }
