@@ -1,14 +1,11 @@
-const Feedback = ({ resp }) => {
-  const { good, neutral, bad } = resp;
-  const totalFeedback = good + neutral + bad;
-  const positivePercentage = Math.round((good / totalFeedback) * 100);
+import s from './Feedback.module.css';
 
+const Feedback = ({ resp, totalFeedback, positivePercentage }) => {
+  const { good, neutral, bad } = resp;
   return (
-    <div>
-      <span>Good: {good}</span>
-      <span>Neutral: {neutral}</span>
-      <span>Bad: {bad}</span>
-      <span>Total: {totalFeedback}</span>
+    <div className={s.feedback}>
+      <span>Good: {good}</span> <span>Neutral: {neutral}</span>
+      <span>Bad: {bad}</span> <span>Total: {totalFeedback}</span>
       <span>Positive: {positivePercentage}%</span>
     </div>
   );

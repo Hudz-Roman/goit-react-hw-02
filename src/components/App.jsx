@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Description from './Description/Description';
 import Feedback from './Feedback/Feedback';
 import Options from './Options/Options';
+import Notification from './Notification/Notification';
 //? CSS
 import 'modern-normalize';
 import '../index.css';
@@ -14,18 +15,40 @@ function App() {
     bad: 0,
   });
 
-  const handleFeedback = (type) => {
+  const totalFeedback = resp.good + resp.neutral + resp.bad;
+
+  const positivePercentage =
+    Math.round((resp.good / totalFeedback) * 100) || null;
+
+  const updateFeedback = (feedbackType) => {
     setResp((prev) => ({
       ...prev,
-      [type]: prev[type] + 1,
+      [feedbackType]: prev[feedbackType] + 1,
     }));
+  };
+
+  const handleReset = () => {
+    setResp({ good: 0, neutral: 0, bad: 0 });
   };
 
   return (
     <div>
       <Description />
-      <Options handleFeedback={handleFeedback} />
-      <Feedback resp={resp} />
+      <Options
+        updateFeedback={updateFeedback}
+        handleReset={handleReset}
+        totalFeedback={totalFeedback}
+      />
+      {totalFeedback > 0 ? (
+        <Feedback
+          resp={resp}
+          totalFeedback={totalFeedback}
+          positivePercentage={positivePercentage}
+          handleReset={handleReset}
+        />
+      ) : (
+        <Notification message='No feedback yet' />
+      )}
     </div>
   );
 }
