@@ -1,11 +1,17 @@
 import s from './Options.module.css';
 
-const Options = ({ updateFeedback, handleReset, totalFeedback }) => {
+const Options = ({ resp, updateFeedback, handleReset, totalFeedback }) => {
   return (
     <div className={s.options}>
-      <button onClick={() => updateFeedback('good')}>Good</button>
-      <button onClick={() => updateFeedback('neutral')}>Neutral</button>
-      <button onClick={() => updateFeedback('bad')}>Bad</button>
+      {Object.keys(resp).map((option) => (
+        <button
+          key={option}
+          className={s.cap}
+          onClick={() => updateFeedback(option)}
+        >
+          {option}
+        </button>
+      ))}
       {totalFeedback > 0 && <button onClick={handleReset}>Reset</button>}
     </div>
   );

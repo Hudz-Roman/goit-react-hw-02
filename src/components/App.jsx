@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 //? Components
 import Description from './Description/Description';
 import Feedback from './Feedback/Feedback';
@@ -9,13 +9,19 @@ import 'modern-normalize';
 import '../index.css';
 
 function App() {
-  const [resp, setResp] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [resp, setResp] = useState(() => {
+    const savedResp = localStorage.getItem('saved-resp');
+    return savedResp ? JSON.parse(savedResp) : { good: 0, neutral: 0, bad: 0 };
   });
 
-  const totalFeedback = resp.good + resp.neutral + resp.bad;
+  useEffect(() => {
+    localStorage.setItem('saved-resp', JSON.stringify(resp));
+  }, [resp]);
+
+  const totalFeedback = Object.values(resp).reduce(
+    (sum, value) => sum + value,
+    0
+  );
 
   const positivePercentage =
     Math.round((resp.good / totalFeedback) * 100) || null;
@@ -38,6 +44,7 @@ function App() {
         updateFeedback={updateFeedback}
         handleReset={handleReset}
         totalFeedback={totalFeedback}
+        resp={resp}
       />
       {totalFeedback > 0 ? (
         <Feedback
